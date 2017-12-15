@@ -1,8 +1,5 @@
 package com.sxl.leecode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class LongetsSubString {
 
@@ -14,38 +11,35 @@ public class LongetsSubString {
 		}else{
 			int startPost = 0;
 			int pos = 1;
-			Map<Integer,Integer> map1 = null;
+			boolean [] has = new boolean[127];
 			int maxLen = 1;
 			while(pos < s.length()){
-				map1 = new HashMap<>();
 				int startValue = s.codePointAt(startPost);
+				has[startValue] = true;
 				int len = 1;
-				map1.put(startValue, 1);
 				int value = s.codePointAt(pos);
-				while((map1.get(value) == null || map1.get(value) <= 0)){
-					map1.put(value, 1);
+				if(!has[value]){
+					has[value] = true;
 					pos++;
-					if(pos >= s.length())
-						break;
-					value = s.codePointAt(pos);
+				}else{
+					while(startValue != value){
+						has[startValue] = false;
+						startPost++;
+						startValue = s.codePointAt(startPost);
+					}
+					startPost++;
+					pos++;
 				}
 				
 				len = pos -startPost;
 				if(len > maxLen)
 					maxLen = len;
-				if(map1.get(value) != null && map1.get(value) > 0){
-					int index = s.indexOf(value, startPost);
-					startPost = index + 1;
-				}else{
-					startPost = pos;
-				}
-				pos = startPost + 1;
 			}
 			
 			return maxLen;
 		}
     }
 	public static void main(String [] args){
-		System.out.println(lengthOfLongestSubstring("dvdf"));
+		System.out.println(lengthOfLongestSubstring("pwwkew"));
 	}
 }
